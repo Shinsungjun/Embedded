@@ -45,7 +45,7 @@ class Obstacle:
         if self.speed < speed:
             # if self.max_count - self.count < 4:
             #     self.count += 1
-            self.speed = speed
+            self.speed = speed*0.88
             self.rate = (40-(self.speed-1) * 4.5)
             self.x_rate = (self.fin_x-self.x) / self.rate
             self.y_rate = (self.fin_y-self.y) / self.rate

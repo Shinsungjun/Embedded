@@ -6,16 +6,14 @@ import board
 from digitalio import DigitalInOut, Direction
 from PIL import Image, ImageDraw, ImageFont
 import adafruit_rgb_display.st7789 as st7789
-from Character import Penguin
+from Character import Penguins
 from MyBoard import Display
 from Background import Background
 from Obstacle import Obstacle
 
-def main():
+def main(Display, Background):
     # Get Object
-    Display = Display()
-    Penguin = Penguin()
-    Background = Background()
+    Penguin = Penguins()
 
     # Get drawing object to draw on image.
     image = Image.new("RGBA", (Display.width, Display.height))
@@ -51,9 +49,7 @@ def main():
     event_animation = 0
     rest_meter = 2500
     ending = 0
-    ending_animation = 0
-    frame_save = 0
-
+    jump_sequence = 999
     while True:
         # Draw Background (White)
         draw.rectangle((0, 0, Display.width, Display.height), outline=0, fill=(255,255,255,255))
@@ -66,17 +62,16 @@ def main():
                 Display.disp.image(image)
 
         # Collision Check    
-        if Penguin.state != 2 or Penguin.state != 3:
+        if Penguin.state == 0: #Only move state
             for obstacle in obstacles :
                 collision = collision or obstacle.collision_check(Penguin)
 
         # Power Mode Time Check
-        if Penguin.state == 3:
+        if Penguin.state == 3 or Penguin.state == 4:
             after_power_time = time.time()
             if after_power_time - power_time > 2 : #Power Mode 2 second
                 print("power off")
                 Penguin.state = 0 #move state
-                obstacle_rate_count = 6
         
         # Collision Event
         if collision :
@@ -102,23 +97,21 @@ def main():
         # Collision Time Check
         after_coltime = time.time()
         if Penguin.state == 2 : #collision state
-            if after_coltime - coltime > 2:
+            if after_coltime - coltime > 2.2:
                 print("collision event over ")
                 power_time = time.time()
                 Penguin.state = 3 #power state
             else :
-                print("collision event")
                 if event_animation == 7:
                     event_animation = 0
                 Penguin.col_move(event_animation)
                 
                 event_animation += 1
 
-        # In Game State Move(0) Power Mode(3)
-        if Penguin.state == 0 or Penguin.state == 3:
+        # In Game State Move(0) Jump(1) Collision(2) Power Mode(3)
+        if Penguin.state != 2:
             score = score + int(10 / 7 * speed)
             hori = 0
-            verti = 0
             if speed_up == 25:
                 if speed < 7:
                     speed += 1
@@ -128,7 +121,7 @@ def main():
             # Button Check
             if not Display.button_U.value:  # up pressed
                 if not ending :
-                    if speed < 7:
+                    if speed < 7 :
                         speed += 1
                         back_count = 8-speed-1
 
@@ -147,11 +140,17 @@ def main():
             if not Display.button_C.value:  # center pressed
                 pass
 
-            if not Display.button_A.value:  # left pressed
+            if not Display.button_A.value:  # A pressed
                 pass
 
-            if not Display.button_B.value:  # left pressed
-                pass
+            if not Display.button_B.value:  # B pressed
+                if jump_sequence > 11 and Penguin.state != 1:
+                    if Penguin.state == 0:
+                        Penguin.state = 1
+                    elif Penguin.state == 3:
+                        Penguin.state = 4
+                    jump_sequence = 0
+
                 
             # Time check
             curr_time = time.time()
@@ -162,8 +161,14 @@ def main():
 
             # Penguin move step
             if rest_meter != 0:
-                Penguin.move(verti, hori)
+                Penguin.move(hori)
 
+            if jump_sequence < 12:
+                Penguin.jump(jump_sequence)
+                jump_sequence += 1
+            if jump_sequence == 12:
+                jump_sequence += 1
+                Penguin.state = 0
             # Random obstacle create
             if not ending :
                 if obstacle_rate_count == obstacle_rate :
@@ -239,13 +244,13 @@ def main():
             elif rest_meter < 400 :
                 image.paste(Background.ending_list[0], (0,0), Background.ending_list[0])
                 
-        # Draw Penguin Shadow
-        image.paste(Penguin.shadow, (0,0), Penguin.shadow)
 
         # Check finish motion
         if rest_meter == 0:
             Penguin.finish()
-            Penguin.jump()
+            
+        # Draw Penguin Shadow
+        image.paste(Penguin.shadow, (0,0), Penguin.shadow)
 
         # Draw Penguin appearance
         image.paste(Penguin.appearance, (0,0), Penguin.appearance)
@@ -276,8 +281,10 @@ def main():
 
         # Game Params Update
         back_count += 1
-        obstacle_rate_count += 1
         speed_up += 1
+        if Penguin.state != 2:
+            obstacle_rate_count += 1
+        
 
         # Rest Meter Update
         if rest_meter < 5 :
@@ -297,4 +304,7 @@ def main():
         Display.disp.image(image)
 
 if __name__ == "__main__":
-    main()
+    disp = Display()
+    background = Background()
+
+    main(disp, background)
