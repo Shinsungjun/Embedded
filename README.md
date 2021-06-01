@@ -6,7 +6,7 @@
 
 Game : Penguin Adventure
 ===
-Penguin must avoid icy roads and reach their destination, the flag.
+Penguin must avoid icy roads and reach destination, the flag.
 
 Manual :
 ---
