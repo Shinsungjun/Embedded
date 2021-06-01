@@ -69,8 +69,7 @@ class Obstacle:
                 if self.curr_y1 > 180:
                     if (Penguin.collision_point_x >= self.curr_x1 and Penguin.collision_point_x <= self.curr_x2
                         and Penguin.collision_point_y >= self.curr_y1 and Penguin.collision_point_y <= self.curr_y2):
-                        print("collision!" + str(self.col_count)) 
-                        Penguin.state = 2 #collision state
+                        print("collision!") 
                         return 1
         return 0
 

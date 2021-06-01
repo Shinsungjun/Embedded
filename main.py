@@ -47,7 +47,7 @@ def main(Display, Background):
     power_time = 0
     score = 0
     event_animation = 0
-    rest_meter = 2500
+    rest_meter = 5000
     ending = 0
     jump_sequence = 999
     while True:
@@ -75,6 +75,7 @@ def main(Display, Background):
         
         # Collision Event
         if collision :
+            Penguin.state = 2 #collision state
             score = score - int(200 / 7 * speed)
             event_animation = 0
             speed = 1
@@ -169,10 +170,11 @@ def main(Display, Background):
             if jump_sequence == 12:
                 jump_sequence += 1
                 Penguin.state = 0
+
             # Random obstacle create
             if not ending :
                 if obstacle_rate_count == obstacle_rate :
-                    obstacle_rate = int(random.random() * 10 + 10)
+                    obstacle_rate = int(random.random() * 10 + 2)
                     obstacle_rate_count = 0
                     random_num1 = random.random()
                     position = 0
@@ -180,7 +182,7 @@ def main(Display, Background):
                         random_num = random.random()
                         if random_num < 0.33 :
                             position = 0
-                        elif random_num < 0.66 :
+                        elif random_num < 0.67 :
                             position = 1
                         else :
                             position = 2
