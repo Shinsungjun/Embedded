@@ -10,9 +10,13 @@ Penguin must avoid icy roads and reach their destination, the flag.
 
 Manual :
 ---
-Left : Left Move \n
+Left : Left Move
+
 Right : Right Move
+
 Up : Speed Up (MAX : 7)
+
 Down : Speed Down (MIN : 1)
+
 A Button : Jump
 
