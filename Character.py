@@ -24,7 +24,6 @@ class Penguins:
         self.life = 4
         self.life_images = []
         self.life_image = Image.open('./images/life/fish.png').convert('RGBA')
-        #self.life_images.append(self.life_image.transform(self.life_image.size, Image.AFFINE, (1,0,100,0,1,100)))
         self.life_images.append(self.life_image.transform(self.life_image.size, Image.AFFINE, (1,0,75,0,1,97)))
         self.life_images.append(self.life_image.transform(self.life_image.size, Image.AFFINE, (1,0,55,0,1,97)))
         self.life_images.append(self.life_image.transform(self.life_image.size, Image.AFFINE, (1,0,35,0,1,97)))
