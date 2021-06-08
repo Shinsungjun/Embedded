@@ -27,9 +27,6 @@ def main(Display, Background):
     game_over_fnt = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 38)
 
     # Game parameter setting
-    curr_time = 0
-    prev_time = time.time()
-    sec = 0
     num = 0
     background = Background.background_list[num]
     back_count = 0
@@ -46,6 +43,7 @@ def main(Display, Background):
     rest_meter = 5000
     ending = 0
     jump_sequence = 999
+    
     while True:
         # Draw Background (White)
         draw.rectangle((0, 0, Display.width, Display.height), outline=0, fill=(255,255,255,255))
@@ -114,14 +112,13 @@ def main(Display, Background):
                 speed_up = 0
 
             # Button Check
-            if not Display.button_U.value:  # up pressed
-                if not ending :
+            if not ending:
+                if not Display.button_U.value:  # up pressed
                     if speed < 7 :
                         speed += 1
                         back_count = 8-speed-1
 
-            if not Display.button_D.value:  # down pressed
-                if not ending :
+                if not Display.button_D.value:  # down pressed
                     if speed > 1 :
                         speed -= 1
                         back_count = 8-speed-1
@@ -145,14 +142,6 @@ def main(Display, Background):
                     elif Penguin.state == 3:
                         Penguin.state = 4
                     jump_sequence = 0
-
-                
-            # Time check
-            curr_time = time.time()
-            sec = curr_time - prev_time
-            fps = 1/(sec)
-            prev_time = curr_time
-            #print(fps) About 10 fps
 
             # Penguin move step
             if rest_meter != 0:
@@ -239,7 +228,6 @@ def main(Display, Background):
 
             elif rest_meter < 400 :
                 image.paste(Background.ending_list[0], (0,0), Background.ending_list[0])
-                
 
         # Check finish motion
         if rest_meter == 0:
