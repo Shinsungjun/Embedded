@@ -1,11 +1,7 @@
 import time
 import random
 import numpy as np
-from colorsys import hsv_to_rgb
-import board
-from digitalio import DigitalInOut, Direction
 from PIL import Image, ImageDraw, ImageFont
-import adafruit_rgb_display.st7789 as st7789
 from Character import Penguins
 from MyBoard import Display
 from Background import Background
@@ -106,13 +102,11 @@ def main(Display, Background):
                 if event_animation == 7:
                     event_animation = 0
                 Penguin.col_move(event_animation)
-                
                 event_animation += 1
 
         # In Game State Move(0) Jump(1) Collision(2) Power Mode(3)
         if Penguin.state != 2:
-            score = score + int(10 / 7 * speed)
-            hori = 0
+            horizental = 0
             if speed_up == 25:
                 if speed < 7:
                     speed += 1
@@ -133,10 +127,10 @@ def main(Display, Background):
                         back_count = 8-speed-1
 
             if not Display.button_L.value:  # left pressed
-                hori = 10
+                horizental = 10
 
             if not Display.button_R.value:  # right pressed
-                hori = -10
+                horizental = -10
 
             if not Display.button_C.value:  # center pressed
                 pass
@@ -162,7 +156,7 @@ def main(Display, Background):
 
             # Penguin move step
             if rest_meter != 0:
-                Penguin.move(hori)
+                Penguin.move(horizental)
 
             if jump_sequence < 12:
                 Penguin.jump(jump_sequence)
@@ -284,9 +278,9 @@ def main(Display, Background):
         # Game Params Update
         back_count += 1
         speed_up += 1
+        score = score + int(10 / 7 * speed)
         if Penguin.state != 2:
             obstacle_rate_count += 1
-        
 
         # Rest Meter Update
         if rest_meter < 5 :
