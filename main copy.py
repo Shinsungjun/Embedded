@@ -55,7 +55,7 @@ def main(Display, Background):
                 draw.text((3, 100), "GAME OVER", font=game_over_fnt, fill=(0,0,0))
                 Display.disp.image(image)
 
-        # Collision Check
+        # Collision Check    
         if Penguin.state == 0: #Only move state
             for obstacle in obstacles :
                 collision = collision or obstacle.collision_check(Penguin)
