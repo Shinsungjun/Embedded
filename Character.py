@@ -20,7 +20,7 @@ class Penguins:
         self.hori_record = 0
         self.verti_record = -70
         self.direction = 0
-        self.state = 0 #0 move 1 jump 2 collision 3 power 4 jump & power
+        self.state = 'move' #0 move 1 jump 2 collision 3 power 4 jump & power
         self.life = 4
         self.life_images = []
         self.life_image = Image.open('./images/life/fish.png').convert('RGBA')
@@ -39,7 +39,7 @@ class Penguins:
                 self.appearance = self.right.transform(self.appearance.size, Image.AFFINE, (1, 0, self.hori_record, 0, 1, self.verti_record))
                 self.direction = 0
             self.shadow = self.shadow_image_full.transform(self.shadow.size, Image.AFFINE, (1, 0, self.hori_record, 0, 1, self.verti_shadow))
-            if self.state == 3 :
+            if self.state == 'power' :
                 if self.count == 0:
                     brightness = ImageEnhance.Brightness(self.appearance)
                     self.appearance = brightness.enhance(10)
@@ -56,7 +56,7 @@ class Penguins:
                 self.appearance = self.right.transform(self.appearance.size, Image.AFFINE, (1, 0, self.hori_record, 0, 1, self.verti_record))
                 self.direction = 0
             self.shadow = self.shadow_image_full.transform(self.shadow.size, Image.AFFINE, (1, 0, self.hori_record, 0, 1, self.verti_shadow))
-            if self.state == 3 :
+            if self.state == 'power' :
                 if self.count == 0:
                     brightness = ImageEnhance.Brightness(self.appearance)
                     self.appearance = brightness.enhance(10)
@@ -76,7 +76,7 @@ class Penguins:
             self.appearance = self.right.transform(self.appearance.size, Image.AFFINE, (1, 0, self.hori_record, 0, 1, self.verti_record))
             self.shadow = self.shadow_image_full.transform(self.shadow.size, Image.AFFINE, (1, 0, self.hori_record, 0, 1, self.verti_shadow))
             self.direction = 0
-        if self.state == 3 :
+        if self.state == 'power' :
                 if self.count == 0:
                     brightness = ImageEnhance.Brightness(self.appearance)
                     self.appearance = brightness.enhance(1000)
@@ -104,7 +104,7 @@ class Penguins:
             elif jump_sequence >= 6:
                 self.shadow = self.shadow_image_small.transform(self.shadow.size, Image.AFFINE, (1, 0, self.hori_record, 0, 1, self.verti_shadow))
         
-        if self.state == 4 : #jump & power
+        if self.state == 'jump&power' : #jump & power
                 if self.count == 0:
                     brightness = ImageEnhance.Brightness(self.appearance)
                     self.appearance = brightness.enhance(1000)
@@ -125,11 +125,16 @@ class Penguins:
     
     def finish(self):
         self.appearance = self.stand.transform(self.appearance.size, Image.AFFINE, (1, 0, self.hori_record, 0, 1, self.verti_record))
-        if self.state == 0:
+        if self.state == 'move':
             self.appearance = self.appearance.transform(self.appearance.size, Image.AFFINE, (1,0,0,0,1,10)) 
             self.shadow = self.shadow_image_full.transform(self.shadow.size, Image.AFFINE, (1, 0, self.hori_record, 0, 1, self.verti_shadow))
-            self.state = 1
+            self.state = 'jump'
         else :
             self.appearance = self.appearance.transform(self.appearance.size, Image.AFFINE, (1,0,0,0,1,-10))
             self.shadow = self.shadow_image_small.transform(self.shadow.size, Image.AFFINE, (1, 0, self.hori_record, 0, 1, self.verti_shadow))
-            self.state = 0
+            self.state = 'move'
+
+    def game_over_check(self):
+        if self.life == 0:
+            return 1
+        return 0

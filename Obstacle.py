@@ -10,17 +10,14 @@ class Obstacle:
         self.position = position
         if self.position == 0:
             self.x = 103
-            self.fin_x = 60
-            
-        
+            self.fin_x = 60    
         elif self.position == 1:
             self.x = 113
-            self.fin_x = 125
-            
+            self.fin_x = 125       
         else :
             self.x = 123
             self.fin_x = 190
-
+            
         self.y = 93
         self.fin_y = 220
         self.rate = (40-(self.speed-1) * 4.5)
@@ -38,13 +35,11 @@ class Obstacle:
         self.center_x = int((self.x + self.fin_x)/2)
         self.center_y = int((self.y + self.fin_y)/2)
         self.count = 0
+        self.col_count = 0 
         self.max_count = self.rate + 10
-        self.col_count = 0
         
     def step(self, speed):
         if self.speed < speed:
-            # if self.max_count - self.count < 4:
-            #     self.count += 1
             self.speed = speed*0.88
             self.rate = (40-(self.speed-1) * 4.5)
             self.x_rate = (self.fin_x-self.x) / self.rate
@@ -64,7 +59,7 @@ class Obstacle:
             self.center_y = int((self.curr_y1 + self.curr_y2)/2)
 
     def collision_check(self, Penguin):
-        if Penguin.state == 0:
+        if Penguin.state == 'move':
             if self.col_count == 0:
                 if self.curr_y1 > 180:
                     if (Penguin.collision_point_x >= self.curr_x1 and Penguin.collision_point_x <= self.curr_x2
